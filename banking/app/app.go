@@ -10,6 +10,9 @@ import (
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	// Swagger docs.
+	_ "github.com/jinsoo-youn/go-archive/banking/docs"
 )
 
 func sanityCheck() {
@@ -38,7 +41,7 @@ func sanityCheck() {
 // @BasePath    /
 func Start() {
 
-	sanityCheck()
+	//sanityCheck()
 
 	// HTTP Server
 	handler := gin.New()
@@ -49,10 +52,28 @@ func Start() {
 
 	handler.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER"))
 	handler.GET("/healthz", func(c *gin.Context) { c.Status(http.StatusOK) })
+	handler.GET("/history", history)
 
 	// starting server
-	address := os.Getenv("SERVER_ADDRESS")
-	port := os.Getenv("SERVER_PORT")
+	//address := os.Getenv("SERVER_ADDRESS")
+	//port := os.Getenv("SERVER_PORT")
+	address := "localhost"
+	port := "8000"
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), handler))
 
+}
+
+// @Summary     Show history
+// @Description Show all translation history
+// @ID          history
+// @Tags  	    history
+// @Accept      json
+// @Produce     json
+// @Success     200
+// @Failure     500
+// @Router      /history [get]
+func history(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "history is OK",
+	})
 }

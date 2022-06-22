@@ -8,10 +8,10 @@ export
 
 
 swag-v1: ### swag init
-	swag init -g app/app.go
+	swag.exe init -g app/app.go
 .PHONY: swag-v1
 
 run: swag-v1 ### swag run
 	go mod tidy && \
-	DISABLE_SWAGGER_HTTP_HANDLER='' GIN_MODE=debug CGO_ENABLED=0 go run -tags migrate ./main.go
+	 go run main.go
 .PHONY: run

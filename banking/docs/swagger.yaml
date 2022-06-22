@@ -5,5 +5,21 @@ info:
   description: Using a translation service as an example
   title: Go Clean Template API
   version: "1.0"
-paths: {}
+paths:
+  /history:
+    get:
+      consumes:
+      - application/json
+      description: Show all translation history
+      operationId: history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "500":
+          description: ""
+      summary: Show history
+      tags:
+      - history
 swagger: "2.0"
