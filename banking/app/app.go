@@ -2,11 +2,11 @@ package app
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/jinsoo-youn/go-pkg/logger"
 	"log"
 	"net/http"
 	"os"
-	"github.com/gin-gonic/gin"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -34,8 +34,8 @@ func sanityCheck() {
 // @title       Go Clean Template API
 // @description Using a translation service as an example
 // @version     1.0
-// @host        localhost:8080
-// @BasePath    /v1
+// @host        localhost:8000
+// @BasePath    /
 func Start() {
 
 	sanityCheck()
@@ -47,12 +47,12 @@ func Start() {
 	handler.Use(gin.Recovery())
 	//Swagger
 
-	handler.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
+	handler.GET("/swagger/*any", ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER"))
+	handler.GET("/healthz", func(c *gin.Context) { c.Status(http.StatusOK) })
 
 	// starting server
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", address, port), handler))
 
-
+}
